@@ -1,0 +1,24 @@
+{
+  "name": "mail",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "inspect": "electron --inspect=5858 .",
+    "package": "electron-packager . Confluence2WP --platform=mas --arch=x64 --icon=./icon/icon.icns --overwrite"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chota": "^0.4.2",
+    "emailjs-mime-parser": "^2.0.4",
+    "jsdom": "^11.6.2",
+    "mailparser": "^2.2.0"
+  },
+  "devDependencies": {
+    "electron": "^1.8.3",
+    "electron-packager": "^11.1.0"
+  }
+}

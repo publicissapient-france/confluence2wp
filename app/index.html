@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Post Converter</title>
+    <script src="js/index.js"></script>
+    <link rel="stylesheet" href="../node_modules/chota/dist/chota.min.css">
+    <style type="text/css">
+        .drop-hover {
+            background-color: var(--lightGrey-color);
+        }
+
+        #html-output {
+            height: 85vh;
+            overflow: scroll;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            user-select: all;
+        }
+
+        .step-1 p {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row" id="initial-steps">
+            <div class="col-6 step-1">
+                <h2>1. Export the article from Confluence</h2>
+                <p>
+                    <img width="200" src="images/export-to-word.png" />
+                </p>
+            </div>
+            <div class="col-6">                
+                <h2>2. Drop the <code>.doc</code> file here</h2>
+            </div>
+        </div>
+        <div class="row" id="final-steps">
+            <div class="col-6">
+                <h2>3. Copy this text...</h2>
+                <p id="html-output">
+                </p>
+            </div>
+            <div class="col-6">
+                <h2>4. ...to here</h2>
+                <p>
+                    <img height="300" src="images/copy-target.png" />
+                </p>
+                <h2>5. Add images</h2>
+                <p>
+                    (They have been saved on your Desktop)
+                </p>
+                <p>
+                    ⚠️⚠️⚠️
+                    Please note that exported images might have a lower quality than expected and in some case you should probably export them again from Confluence.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        (function() {
+            setupInitialState()
+
+            window.ondragover = function(e) {
+                e.preventDefault()
+                e.dataTransfer.dropEffect = 'copy'
+                window.document.body.className = "drop-hover"
+                return false
+            }
+            
+            window.ondrop = function(e) {
+                e.preventDefault()
+                const file = e.dataTransfer.files[0]
+                dropped(file.path)
+                window.document.body.className = ""
+                return false
+            }
+            
+            window.ondragleave = function () {
+                window.document.body.className = ""
+                return false
+            }
+        })()
+    </script>
+</body>
+</html>
