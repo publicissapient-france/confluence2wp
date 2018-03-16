@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "chota": "^0.4.2",
+    "dotenv": "^5.0.1",
     "jsdom": "^11.6.2",
     "mailparser": "^2.2.0"
   },

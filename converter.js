@@ -2,9 +2,12 @@ const simpleParser = require("mailparser").simpleParser
 const fs = require('fs')
 const path = require('path')
 const { JSDOM } = require("jsdom")
+require("dotenv").config()
 
 const OUTPUT_DIR = "blog-post"
 const BLOG_ROOT = "http://blog.xebia.fr/wp-content/uploads"
+const CONFLUENCE_API_TOKEN = process.env.CONFLUENCE_API_TOKEN
+const CONFLUENCE_USER = process.env.CONFLUENCE_USER
 
 function strPad(n) {
     return String("00" + n).slice(-2)
