@@ -34,13 +34,13 @@ app.on('activate', () => {
 
 ipcMain.on('start-parsing', function(event, arg) {
     converter.parse(app.getPath("desktop"), arg)
-    .then( HTML => {
-        win.webContents.send('parsing-completed', { rawHTML: HTML })
-        dialog.showMessageBox({
-            message: "Converted successfully"
+        .then( HTML => {
+            win.webContents.send('parsing-completed', { rawHTML: HTML })
+            dialog.showMessageBox({
+                message: "Converted successfully"
+            })
         })
-    })
-    .catch( error => {
-        dialog.showErrorBox("Error", error)
-    })
+        .catch( error => {
+            dialog.showErrorBox("Error", error.message)
+        })
 })

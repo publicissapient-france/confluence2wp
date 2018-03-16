@@ -1,6 +1,6 @@
 {
-  "name": "mail",
-  "version": "1.0.0",
+  "name": "confluence2wp",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "chota": "^0.4.2",
-    "emailjs-mime-parser": "^2.0.4",
     "jsdom": "^11.6.2",
     "mailparser": "^2.2.0"
   },
