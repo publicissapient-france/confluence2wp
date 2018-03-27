@@ -4,6 +4,8 @@ const path = require('path')
 const { JSDOM } = require("jsdom")
 require("dotenv").config()
 const request = require('request')
+const Entities = require('html-entities').XmlEntities
+const entities = new Entities()
 
 const OUTPUT_DIR = "blog-post"
 const BLOG_ROOT = "http://blog.xebia.fr/wp-content/uploads"
@@ -115,7 +117,7 @@ module.exports = {
             }
             
             // Create HTML output
-            const HTML = dom.window.document.body.innerHTML
+            const HTML = entities.decode(dom.window.document.body.innerHTML)
             fs.writeFileSync(path.resolve(outputDir, 'output.txt'), HTML)
             
             return HTML

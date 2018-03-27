@@ -1,8 +1,10 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, clipboard } = require('electron')
 
 function dropped(filePath) {
     ipcRenderer.send('start-parsing', filePath)
 }
+
+let articleText = ""
 
 function setupInitialState() {
     const initialStepsContainer = window.document.getElementById("initial-steps")
@@ -11,13 +13,9 @@ function setupInitialState() {
     const finalStepsContainer = window.document.getElementById("final-steps")
     finalStepsContainer.style.display = "none"
 
-    window.document.getElementById("html-output").onclick = (() => {
-        setTimeout(() => {
-            if (window.getSelection().toString().length > 0) {
-                document.execCommand("copy")
-                alert("Article body copied")
-            }
-        }, 100)
+    document.getElementById("copy-text-button").addEventListener("click", () => {
+        clipboard.writeText(articleText)
+        alert("Text was copied") 
     })
 }
 
@@ -27,7 +25,5 @@ ipcRenderer.on('parsing-completed', function(event, arg) {
 
     const finalStepsContainer = window.document.getElementById("final-steps")
     finalStepsContainer.style.display = "flex"
-
-    const htmlOutputContainer = window.document.getElementById("html-output")
-    htmlOutputContainer.innerText = arg.rawHTML
+    articleText = arg.rawHTML
 })

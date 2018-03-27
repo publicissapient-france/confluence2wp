@@ -15,10 +15,14 @@
             overflow: scroll;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9rem;
-            user-select: all;
+            user-select: none;
         }
 
         .step-1 p {
+            text-align: center;
+        }
+
+        #copy-text-container {
             text-align: center;
         }
     </style>
@@ -39,8 +43,9 @@
         <div class="row" id="final-steps">
             <div class="col-6">
                 <h2>3. Copy this text...</h2>
-                <p id="html-output">
-                </p>
+                <div id="copy-text-container">
+                    <button id="copy-text-button">Copy Text</button>
+                </div>
             </div>
             <div class="col-6">
                 <h2>4. ...to here</h2>
