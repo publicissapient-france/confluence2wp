@@ -2,9 +2,13 @@ const simpleParser = require("mailparser").simpleParser
 const fs = require('fs')
 const path = require('path')
 const { JSDOM } = require("jsdom")
+require("dotenv").config()
+const request = require('request')
 
 const OUTPUT_DIR = "blog-post"
 const BLOG_ROOT = "http://blog.xebia.fr/wp-content/uploads"
+const CONFLUENCE_API_TOKEN = process.env.CONFLUENCE_API_TOKEN
+const CONFLUENCE_USER = process.env.CONFLUENCE_USER
 
 function strPad(n) {
     return String("00" + n).slice(-2)
@@ -21,33 +25,58 @@ function extractBrush(params) {
     return "java"
 }
 
+function downloadTo(url, dest) {
+    var file = fs.createWriteStream(dest)
+    var sendReq = request.get(url, {
+        'auth': {
+            'user': CONFLUENCE_USER,
+            'pass': CONFLUENCE_API_TOKEN,
+            'sendImmediately': true
+        }
+    })
+    
+    sendReq.on('error', function (err) {
+        fs.unlink(dest)
+    })
+    
+    sendReq.pipe(file)
+    
+    file.on('finish', function() {
+        file.close()
+    })
+    
+    file.on('error', function(err) {
+        fs.unlink(dest)
+    })
+}
+
 module.exports = {
     parse: function(outputRootDir, targetPath) {
         const outputDir = outputRootDir + "/" + OUTPUT_DIR
-
+        
         return new Promise((resolve, reject) => {
             const contents = fs.readFileSync(targetPath, 'utf8')
             if (!contents.startsWith("Message-ID:")) {
                 reject("Invalid document")
                 return
             }
-    
+            
             // Create images dir
             if (!fs.existsSync(outputDir)){
                 fs.mkdirSync(outputDir)
             }
-
+            
             resolve(contents)
         })
         .then(simpleParser)
         .then(mail => {
             let html = mail.html
             fs.writeFileSync(outputDir + '/output.debug.html', mail.html)
-
+            
             // Clean up
             html = html.replace(/&nbsp; /g, " ")
             html = html.replace(/<pre class="(\w)+"><br><\/pre>/g, " ")
-
+            
             const date = new Date();
             const year = date.getFullYear().toString()
             const month = strPad(date.getMonth() + 1)
@@ -63,7 +92,7 @@ module.exports = {
                 pre.outerHTML = "[" + brush + "]" + pre.innerHTML + "[/" + brush + "]"
                 pre = dom.window.document.getElementsByClassName("syntaxhighlighter-pre")[0]
             }
-
+            
             // Process images
             let attachedImages = {};
             mail.attachments.forEach(attachment => {
@@ -74,11 +103,9 @@ module.exports = {
             
             const embeddedImages = dom.window.document.getElementsByClassName("confluence-embedded-image")
             for (const image of embeddedImages) {
-                const currentSrc = image.src
                 const alias = image.getAttribute("data-linked-resource-default-alias").replace(/ /g, "-")
-                fs.writeFile(path.resolve(outputDir, alias), attachedImages[currentSrc], "binary", error => {
-                    if (error) console.error(error)
-                })
+                const remoteSrc = decodeURI(image.getAttribute("data-image-src"))
+                downloadTo(remoteSrc, path.resolve(outputDir, alias))
                 
                 image.src = BLOG_ROOT + "/" + year + "/" + month + "/" + alias
             }
@@ -86,7 +113,7 @@ module.exports = {
             // Create HTML output
             const HTML = dom.window.document.body.innerHTML
             fs.writeFileSync(path.resolve(outputDir, 'output.txt'), HTML)
-
+            
             return HTML
         })
     }    
