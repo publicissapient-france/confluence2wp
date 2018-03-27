@@ -76,7 +76,7 @@ module.exports = {
             fs.writeFileSync(outputDir + '/output.debug.html', mail.html)
             
             // Clean up
-            html = html.replace(/&nbsp; /g, " ")
+            html = html.replace(/&nbsp;/g, " ")
             html = html.replace(/<pre class="(\w)+"><br><\/pre>/g, " ")
             
             const date = new Date();
