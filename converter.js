@@ -103,11 +103,15 @@ module.exports = {
             
             const embeddedImages = dom.window.document.getElementsByClassName("confluence-embedded-image")
             for (const image of embeddedImages) {
-                const alias = image.getAttribute("data-linked-resource-default-alias").replace(/ /g, "-")
-                const remoteSrc = decodeURI(image.getAttribute("data-image-src"))
-                downloadTo(remoteSrc, path.resolve(outputDir, alias))
+                const aliasTag = image.getAttribute("data-linked-resource-default-alias")
                 
-                image.src = BLOG_ROOT + "/" + year + "/" + month + "/" + alias
+                if (aliasTag != null) {
+                    const alias = aliasTag.replace(/ /g, "-")
+                    const remoteSrc = decodeURI(image.getAttribute("data-image-src"))
+                    downloadTo(remoteSrc, path.resolve(outputDir, alias))
+                    
+                    image.src = BLOG_ROOT + "/" + year + "/" + month + "/" + alias
+                }
             }
             
             // Create HTML output
