@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "inspect": "electron --inspect=5858 .",
-    "package": "electron-packager . Confluence2WP --platform=mas --arch=x64 --icon=./icon/icon.icns --overwrite"
+    "package": "electron-packager . Confluence2WP --platform=mas --arch=x64 --icon=./icon/icon.icns --overwrite --out=releases --ignore=\\.releases/"
   },
   "author": "",
   "license": "ISC",
