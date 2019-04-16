@@ -57,12 +57,7 @@ module.exports = {
         const outputDir = outputRootDir + "/" + OUTPUT_DIR
         
         return new Promise((resolve, reject) => {
-            const contents = fs.readFileSync(targetPath, 'utf8')
-            if (!contents.startsWith("Message-ID:")) {
-                reject("Invalid document")
-                return
-            }
-            
+            const contents = fs.readFileSync(targetPath, 'utf8')            
             // Create images dir
             if (!fs.existsSync(outputDir)){
                 fs.mkdirSync(outputDir)
