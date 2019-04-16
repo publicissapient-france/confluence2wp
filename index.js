@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+process.env['APP_PATH'] = app.getAppPath()
 const path = require('path')
 const url = require('url')
 const converter = require('./converter')

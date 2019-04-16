@@ -2,7 +2,7 @@ const simpleParser = require("mailparser").simpleParser
 const fs = require('fs')
 const path = require('path')
 const { JSDOM } = require("jsdom")
-require("dotenv").config()
+require("dotenv").config({ path: process.env.APP_PATH + "/.env" })
 const request = require('request')
 const Entities = require('html-entities').XmlEntities
 const entities = new Entities()
